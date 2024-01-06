@@ -111,6 +111,21 @@ print("\n** Welcome to Task Manager! **")
 
 logged_in_username = user_login()
 
+def delete_user(file_path, username):
+    users = read_username_password(file_path)
+    found = False
+
+    try:
+        with open(file_path, "w") as file:
+            for user in users:
+                if user["username"] == username:
+                    print(f"User '{username}' has been deleted.")
+                    found = True
+                else:
+                    file.write(f"{user['username']}, {user['password']}\n")
+    except Exception as e:
+        print(f"\nAn error occurred while deleting the user: {e}")
+
 # while loop to display menu options
 # check if user is  admin
 # display admin menu if admin
@@ -126,6 +141,7 @@ while True:
     \tva\t - \t view all tasks  
     \tvm\t - \t view my tasks 
     \ts\t - \t statistics
+    \td\t - \t delete user
     \te\t - \t exit 
     : """
         ).lower()
@@ -264,6 +280,13 @@ while True:
     elif menu == "s":
         if logged_in_username == "admin":
             admin_menu()
+
+    if menu == "d":
+        if logged_in_username == "admin":
+            username_to_delete = input("\nEnter the username to delete: ")
+            delete_user(user_file_path, username_to_delete)
+        else:
+            print("\nSorry! Only 'admin' is allowed to delete users.")
 
     # exit the program when 'e' is chosen from the menu
 
