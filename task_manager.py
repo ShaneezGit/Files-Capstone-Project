@@ -88,13 +88,21 @@ def new_user(file_path, username, password):
 # increment the task for each line
 
 def admin_menu():
-    total_users = len(read_username_password(user_file_path))
+    try:
+        total_users = len(read_username_password(user_file_path))
+    except Exception as e:
+        print(f"\nError occurred while fetching user details: {e}")
+        total_users = 0
 
-    with open(task_file_path, "r") as file:
+    try:
+        with open(task_file_path, "r") as file:
+            total_tasks = sum(1 for line in file)
+    except FileNotFoundError:
+        print(f"\nFile '{task_file_path}' not found.")
         total_tasks = 0
-
-        for line in file:
-            total_tasks += 1
+    except Exception as e:
+        print(f"\nError occurred while fetching task details: {e}")
+        total_tasks = 0    
    
     print(f"\nTotal number of users: {total_users}")
     print(f'Total number of tasks: {total_tasks}')
